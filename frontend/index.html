@@ -10,10 +10,11 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
   
-  <!-- Tailwind CSS & Chart.js -->
+  <!-- Tailwind CSS, Chart.js, Confetti, & HTML2PDF -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
   <script>
     tailwind.config = {
@@ -82,12 +83,12 @@
 
 <body class="bg-[#090d16] text-slate-100 min-h-screen relative overflow-x-hidden selection:bg-pink-500 selection:text-white">
 
-  <!-- Ambient Glow Orbs in Background -->
+  <!-- Ambient Background Glows -->
   <div class="fixed top-[-10%] left-[-10%] w-[500px] h-[500px] bg-purple-600/20 rounded-full blur-[140px] pointer-events-none animate-glow-pulse"></div>
   <div class="fixed bottom-[-10%] right-[-10%] w-[550px] h-[550px] bg-pink-600/15 rounded-full blur-[160px] pointer-events-none animate-glow-pulse" style="animation-delay: 2s;"></div>
   <div class="fixed top-[40%] left-[45%] w-[400px] h-[400px] bg-indigo-600/15 rounded-full blur-[150px] pointer-events-none"></div>
 
-  <!-- Top Navigation Bar -->
+  <!-- Header -->
   <header class="sticky top-0 z-50 glass-panel border-b border-slate-800/80">
     <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
       
@@ -118,10 +119,10 @@
     </div>
   </header>
 
-  <!-- Main Content Stage -->
+  <!-- Main Container -->
   <main class="max-w-7xl mx-auto px-6 py-10">
 
-    <!-- Hero Header Banner -->
+    <!-- Hero Title -->
     <section class="text-center max-w-3xl mx-auto mb-10 space-y-3">
       <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-pink-500/10 border border-pink-500/20 text-pink-300 mb-2">
         <span class="flex h-2 w-2 rounded-full bg-pink-400 animate-ping"></span>
@@ -131,11 +132,11 @@
         Turn Sloppy Repos into <span class="neon-text-gradient">Production Diamonds</span>.
       </h1>
       <p class="text-slate-400 text-sm md:text-base leading-relaxed">
-        Autonomous codebase diagnostics, secret detection, transparent health scoring, and 1-click starter pull request fixes.
+        Autonomous codebase diagnostics, secret leak detection, transparent health scoring, and 1-click starter pull request fixes.
       </p>
     </section>
 
-    <!-- Single Repository Input Deck -->
+    <!-- Single Repository Input Box -->
     <section id="singleInputSection" class="glass-card rounded-2xl p-6 md:p-8 mb-10 relative overflow-hidden group">
       <div class="absolute -top-24 -right-24 w-48 h-48 bg-purple-500/10 rounded-full blur-3xl group-hover:bg-pink-500/20 transition-all"></div>
       
@@ -146,7 +147,7 @@
             <input 
               id="repoUrlInput" 
               type="text" 
-              placeholder="" 
+              placeholder="https://github.com/owner/repository" 
               class="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl pl-11 pr-4 py-3.5 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20 transition-all"
             />
           </div>
@@ -166,11 +167,11 @@
           </summary>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3 pt-3 border-t border-slate-800">
             <div>
-              <label class="block mb-1 text-slate-400 font-mono text-[11px]">GitHub Personal Token (Overrides default)</label>
+              <label class="block mb-1 text-slate-400 font-mono text-[11px]">GitHub Personal Token (Overrides .env)</label>
               <input id="customGhToken" type="password" placeholder="ghp_..." class="w-full bg-slate-950/80 border border-slate-800 rounded-lg px-3 py-2 text-white font-mono" />
             </div>
             <div>
-              <label class="block mb-1 text-slate-400 font-mono text-[11px]">Groq AI API Key (For Custom LLM Quota)</label>
+              <label class="block mb-1 text-slate-400 font-mono text-[11px]">Groq AI API Key (Overrides .env)</label>
               <input id="customGroqKey" type="password" placeholder="gsk_..." class="w-full bg-slate-950/80 border border-slate-800 rounded-lg px-3 py-2 text-white font-mono" />
             </div>
           </div>
@@ -178,10 +179,10 @@
       </form>
     </section>
 
-    <!-- Comparison Input Deck (Hidden by default) -->
+    <!-- Comparison Input Box (Feature 6) -->
     <section id="compareInputSection" class="hidden glass-card rounded-2xl p-6 md:p-8 mb-10 relative overflow-hidden">
       <h2 class="text-xl font-bold text-white mb-2 flex items-center gap-2">⚔️ Head-to-Head Repository Showdown</h2>
-      <p class="text-xs text-slate-400 mb-6">Pit two repositories against each other to crown the cleaner, better-tested codebase.</p>
+      <p class="text-xs text-slate-400 mb-6">Pit two repositories against each other to benchmark quality metrics and crown the winner.</p>
       
       <form onsubmit="executeComparison(event)" class="space-y-4">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -200,7 +201,7 @@
       </form>
     </section>
 
-    <!-- Loading State Screen -->
+    <!-- Loading State -->
     <div id="loadingState" class="hidden py-16 text-center space-y-4">
       <div class="relative inline-block">
         <div class="w-16 h-16 rounded-full border-4 border-slate-800 border-t-pink-500 border-r-purple-500 animate-spin"></div>
@@ -215,7 +216,7 @@
       <div class="flex-1 text-xs md:text-sm" id="errorMsgText"></div>
     </div>
 
-    <!-- Comparison Results View -->
+    <!-- Comparison Results View (Feature 6) -->
     <div id="compareResultsStage" class="hidden space-y-6">
       <div class="glass-card p-6 rounded-2xl text-center border-indigo-500/30 relative overflow-hidden">
         <div class="absolute inset-0 bg-gradient-to-r from-purple-500/10 via-pink-500/10 to-indigo-500/10 pointer-events-none"></div>
@@ -230,7 +231,7 @@
     <!-- ========================================================== -->
     <div id="auditDashboard" class="hidden space-y-8">
       
-      <!-- Top Repository Highlight Header -->
+      <!-- Top Highlight Header -->
       <div class="glass-card rounded-2xl p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6 border-slate-700/60 relative">
         <div class="space-y-2 text-center md:text-left">
           <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800 border border-slate-700 text-slate-300 text-xs font-mono">
@@ -292,13 +293,12 @@
           🤖 AI Action Roadmap
         </button>
         <button type="button" onclick="switchDashboardTab('fixes')" id="dashTab-fixes" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-400 hover:text-white whitespace-nowrap transition">
-          ⚡ 1-Click Fixes & Badge
+          ⚡ 1-Click Fixes & Export
         </button>
       </div>
 
-      <!-- TAB 1: OVERVIEW & HISTORICAL PROGRESS -->
+      <!-- TAB 1: OVERVIEW & HISTORICAL PROGRESS (Feature 5) -->
       <div id="pane-overview" class="space-y-6">
-        <!-- Feature 5: Before vs After Delta & Timeline Chart -->
         <div class="glass-card rounded-2xl p-6 md:p-8">
           <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-3 mb-6">
             <div>
@@ -321,7 +321,7 @@
           </div>
         </div>
 
-        <!-- Radar & Dimension Breakdown Progress Bars -->
+        <!-- Radar & Dimension Breakdown Bars -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div class="glass-card rounded-2xl p-6">
             <h3 class="text-sm font-bold text-white mb-4">Quality Radar Matrix</h3>
@@ -348,7 +348,7 @@
         </div>
       </div>
 
-      <!-- TAB 2: SCORE TRANSPARENCY (FEATURE 7) -->
+      <!-- TAB 2: SCORE TRANSPARENCY (Feature 4) -->
       <div id="pane-why" class="hidden space-y-4">
         <div class="glass-card rounded-2xl p-6 md:p-8">
           <h3 class="text-lg font-bold text-white mb-1">🧠 Transparent Scoring Rationale</h3>
@@ -357,7 +357,7 @@
         </div>
       </div>
 
-      <!-- TAB 3: AI IMPROVEMENT ROADMAP (FEATURE 6) -->
+      <!-- TAB 3: AI IMPROVEMENT ROADMAP (Feature 3) -->
       <div id="pane-roadmap" class="hidden space-y-6">
         <div class="glass-card rounded-2xl p-6 md:p-8 space-y-6">
           <div>
@@ -409,15 +409,15 @@
         </div>
       </div>
 
-      <!-- TAB 4: 1-CLICK FIXES & SECURITY AUDIT -->
+      <!-- TAB 4: 1-CLICK FIXES, SECURITY AUDIT & EXPORT (Features 1, 2, 7) -->
       <div id="pane-fixes" class="hidden space-y-6">
-        <!-- Security Scanner -->
+        <!-- Security Scanner (Feature 1) -->
         <div class="glass-card rounded-2xl p-6 md:p-8">
           <h3 class="text-base font-bold text-white mb-2 flex items-center gap-2"><span>🛡️</span> Security & Secret Scanner Report</h3>
           <div id="securityScanReportBox" class="text-xs md:text-sm text-slate-300"></div>
         </div>
 
-        <!-- 1-Click Fix Code Generators -->
+        <!-- 1-Click Fix Code Generators (Feature 2) -->
         <div class="glass-card rounded-2xl p-6 md:p-8">
           <h3 class="text-base font-bold text-white mb-4 flex items-center gap-2"><span>⚡</span> Instant PR Starter Files</h3>
           <div class="flex gap-2 border-b border-slate-800 pb-3 mb-4 overflow-x-auto">
@@ -430,9 +430,13 @@
           <pre id="snippetCodeDisplay" class="bg-slate-950 p-4 rounded-xl text-xs font-mono text-slate-300 overflow-x-auto border border-slate-800 leading-relaxed"></pre>
         </div>
 
-        <div class="text-right">
-          <button type="button" onclick="downloadAuditReport()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold px-5 py-3 rounded-xl transition flex items-center gap-2 ml-auto">
-            <span>📥</span> Download Full Markdown Report (.md)
+        <!-- Downloadable Audit Report (Feature 7) -->
+        <div class="flex justify-end gap-3 pt-2">
+          <button type="button" onclick="downloadAuditReport('md')" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold px-4 py-2.5 rounded-xl transition flex items-center gap-1.5">
+            <span>📥</span> Export Markdown (.md)
+          </button>
+          <button type="button" onclick="downloadAuditReport('pdf')" class="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition flex items-center gap-1.5 shadow-lg shadow-pink-600/20">
+            <span>📄</span> Export PDF Report (.pdf)
           </button>
         </div>
       </div>
@@ -440,7 +444,7 @@
     </div>
   </main>
 
-  <!-- Application Logic -->
+  <!-- Complete Javascript -->
   <script>
     let activeAuditData = null;
     let radarChartObj = null;
@@ -498,7 +502,7 @@
         activeAuditData = data;
         renderDashboard(data);
 
-        // Confetti effect if score is above 80
+        // Confetti celebration if high score
         if (data.overall_health >= 80 && typeof confetti === 'function') {
           confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
         }
@@ -565,7 +569,7 @@
         document.getElementById('metaFiles').innerText = data.discovered_files?.total_files ?? 0;
         document.getElementById('metaLicense').innerText = data.meta?.license || 'None Found';
 
-        // 1. Before vs After Delta
+        // 1. Before vs After Delta (Feature 5)
         const deltaEl = document.getElementById('deltaProgressBadge');
         const delta = data.delta ?? 0;
         if (delta > 0) {
@@ -620,7 +624,7 @@
           });
         }
 
-        // 2. Score Transparency ("Why the score exists")
+        // 2. Score Transparency / Explainability (Feature 4)
         const scores = data.scores || {};
         const dims = [
           { key: 'code_quality', name: 'Code Architecture', score: scores.code_quality ?? 70 },
@@ -651,7 +655,7 @@
           `;
         }).join('');
 
-        // 3. AI Improvement Roadmap
+        // 3. AI Improvement Roadmap (Feature 3)
         const cats = data.roadmap?.categories || {};
         const renderList = (arr, empty) => (arr && arr.length > 0) ? arr.map(i => `<li>${i}</li>`).join('') : `<li class="text-slate-500 italic">${empty}</li>`;
         
@@ -708,7 +712,7 @@
           });
         }
 
-        // Security report box
+        // Security report box (Feature 1)
         const secRisks = data.security?.risks || [];
         document.getElementById('securityScanReportBox').innerHTML = secRisks.length === 0
           ? `<p class="text-emerald-400 font-semibold">✓ Zero exposed keys, secrets, or sensitive configuration files detected.</p>`
@@ -766,10 +770,26 @@
       if (type === 'badge') display.innerText = activeAuditData.badge_markdown || '';
     }
 
-    function downloadAuditReport() {
+    // Feature 7: Downloadable Audit Report (Markdown + PDF)
+    function downloadAuditReport(format = 'md') {
       if (!activeAuditData) return;
       const d = activeAuditData;
       const seq = (d.roadmap && d.roadmap.sequential_path) ? d.roadmap.sequential_path.join('\n') : '';
+
+      if (format === 'pdf') {
+        const element = document.getElementById('auditDashboard');
+        const opt = {
+          margin: 0.4,
+          filename: `${d.repo}_health_audit.pdf`,
+          image: { type: 'jpeg', quality: 0.98 },
+          html2canvas: { scale: 2, useCORS: true },
+          jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+        };
+        html2pdf().set(opt).from(element).save();
+        return;
+      }
+
+      // Markdown Export
       const md = `# PulseRepo Audit: ${d.owner}/${d.repo}\n\n**Overall Health:** ${d.overall_health}/100\n**Security Grade:** ${d.security?.score}/100\n**Progress Delta:** ${d.delta > 0 ? '+' : ''}${d.delta} pts\n\n## Scores\n- Architecture: ${d.scores?.code_quality}/100\n- Security: ${d.scores?.security}/100\n- Documentation: ${d.scores?.documentation}/100\n- Testing: ${d.scores?.testing}/100\n- Structure: ${d.scores?.structure}/100\n- Dependencies: ${d.scores?.dependencies}/100\n\n## Action Roadmap\n${seq}\n\n## Executive Summary\n${d.summary}\n`;
       const blob = new Blob([md], { type: 'text/markdown' });
       const a = document.createElement('a');
